@@ -1,16 +1,19 @@
 import { SelectSortBy } from '@common/models';
+import useScrollBottom from '@hooks/useScrollBottom';
 import defaultImage from '@images/default-image.jpg';
 import appApi from '@shared-data/app.api';
 import MovieList from '@shared-ui/movie-list';
 import SortBy from '@shared-ui/sort-by';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './style.module.scss';
 
 const Actor = () => {
+  const navigate = useNavigate();
   const id = useParams().id;
   const [selectValue, setSelectValue] = useState<SelectSortBy>('popularity');
+  const reachedBottom = useScrollBottom();
 
   const { data: actor } = useQuery({
     queryKey: ['actor', { id }],
@@ -29,6 +32,15 @@ const Actor = () => {
   const changeSortBy = (value: SelectSortBy) => {
     setSelectValue(value);
   };
+
+  useEffect(() => {
+    if (isFetchingNextPage) {
+      return;
+    }
+    if (reachedBottom && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [reachedBottom]);
 
   return (
     <>
@@ -62,7 +74,7 @@ const Actor = () => {
               >
                 IMDB<i className="fa fa-film" aria-hidden="true"></i>
               </a>
-              <a className={`${styles['button']} ${styles['back']}`}>
+              <a className={`${styles['button']} ${styles['back']}`} onClick={() => navigate(-1)}>
                 <i className="fa fa-arrow-left" aria-hidden="true"></i>Back
               </a>
             </div>
@@ -78,7 +90,7 @@ const Actor = () => {
           isFetching={isFetchingNextPage}
           isError={isError}
         >
-          <SortBy changeSortBy={changeSortBy} />
+          <SortBy selectValue={selectValue} changeSortBy={changeSortBy} />
         </MovieList>
       ))}
     </>

@@ -1,14 +1,18 @@
+import useScrollBottom from '@hooks/useScrollBottom';
 import defaultImage from '@images/default-image.jpg';
 import appApi from '@shared-data/app.api';
+import CastSlider from '@shared-ui/cast-slider';
+import MovieList from '@shared-ui/movie-list';
 import StarRating from '@shared-ui/star-rating';
 import { useInfiniteQuery, useQueries } from '@tanstack/react-query';
-import { Link, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import styles from './style.module.scss';
-import MovieList from '@shared-ui/movie-list';
-import CastSlider from '@shared-ui/cast-slider';
 
 const MovieDetail = () => {
+  const navigate = useNavigate();
   const id = useParams().id;
+  const reachedBottom = useScrollBottom();
 
   const [{ data: credits }, { data: movie }] = useQueries({
     queries: [
@@ -30,6 +34,15 @@ const MovieDetail = () => {
       return lastPage.page === lastPage.total_pages ? undefined : lastPage.page + 1;
     }
   });
+
+  useEffect(() => {
+    if (isFetchingNextPage) {
+      return;
+    }
+    if (reachedBottom && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [reachedBottom]);
 
   return (
     <>
@@ -103,7 +116,7 @@ const MovieDetail = () => {
               <a href="" target="_blank" rel="noreferrer" className={styles['button']}>
                 Trailer<i className="fa fa-play" aria-hidden="true"></i>
               </a>
-              <a className={`${styles['button']} ${styles['back']}`}>
+              <a className={`${styles['button']} ${styles['back']}`} onClick={() => navigate(-1)}>
                 <i className="fa fa-arrow-left" aria-hidden="true"></i>Back
               </a>
             </div>

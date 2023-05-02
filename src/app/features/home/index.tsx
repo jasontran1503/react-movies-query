@@ -1,12 +1,15 @@
 import { MainTitle } from '@common/models';
+import useScrollBottom from '@hooks/useScrollBottom';
 import useTitle from '@hooks/useTitle';
 import appApi from '@shared-data/app.api';
 import MovieList from '@shared-ui/movie-list';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const Home = () => {
   const [main, sub] = useTitle();
+  const reachedBottom = useScrollBottom();
   const [searchParams] = useSearchParams();
 
   const getMovies = ({ pageParam = 1 }) => {
@@ -32,11 +35,14 @@ const Home = () => {
     }
   });
 
-  const loadMore = () => {
-    if (hasNextPage) {
+  useEffect(() => {
+    if (isFetchingNextPage) {
+      return;
+    }
+    if (reachedBottom && hasNextPage) {
       fetchNextPage();
     }
-  };
+  }, [reachedBottom]);
 
   return (
     <>
@@ -49,9 +55,6 @@ const Home = () => {
           isError={isError}
         />
       ))}
-      <button className="btn btn-primary" disabled={isFetchingNextPage} onClick={loadMore}>
-        Load more
-      </button>
     </>
   );
 };

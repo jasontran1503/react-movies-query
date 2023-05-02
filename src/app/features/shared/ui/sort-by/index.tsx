@@ -1,18 +1,21 @@
 import { SelectSortBy } from '@common/models';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 
-const SortBy = ({ changeSortBy }: { changeSortBy: (value: SelectSortBy) => void }) => {
-  const [selectValue, setSelectValue] = useState<SelectSortBy>('popularity');
-
+const SortBy = ({
+  selectValue,
+  changeSortBy
+}: {
+  selectValue: SelectSortBy;
+  changeSortBy: (value: SelectSortBy) => void;
+}) => {
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value as SelectSortBy;
-    setSelectValue(value);
     changeSortBy(value);
   };
 
   return (
     <div className="form-group w-50">
-      <select className="form-control" value={selectValue} onChange={(e) => onChange(e)}>
+      <select className="form-control" value={selectValue} onChange={onChange}>
         <option value="popularity">Popularity</option>
         <option value="vote_average">Vote Average</option>
         <option value="original_title">Original Title</option>
