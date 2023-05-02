@@ -18,7 +18,14 @@
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "types": ["vite/client", "vitest"]
+    "types": ["vite/client", "vitest"],
+    "paths": {
+      "@images/*": ["./src/assets/images/*"],
+      "@common/*": ["./src/app/common/*"],
+      "@hooks/*": ["./src/app/hooks/*"],
+      "@shared-data/*": ["./src/app/features/shared/data-access/*"],
+      "@shared-ui/*": ["./src/app/features/shared/ui/*"]
+    }
   },
   "files": [],
   "include": [],

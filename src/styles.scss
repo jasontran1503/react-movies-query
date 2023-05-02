@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'react-alice-carousel/lib/scss/alice-carousel.scss';
+@import 'styles/mode.scss';
+@import 'styles/variables/_font-size.scss';
+
+body {
+  background-color: var(--palette-background) !important;
+}

@@ -1,0 +1,35 @@
+.toggle {
+  margin: 0 15px;
+  display: flex;
+  align-items: center;
+  .icon {
+    font-size: 1.25rem;
+  }
+  .icon-toggle-on {
+    margin: 0 5px;
+    color: var(--palette-icon);
+    cursor: pointer;
+    font-size: 30px;
+  }
+  .icon-toggle-off {
+    margin: 0 5px;
+    color: var(--palette-icon);
+    cursor: pointer;
+    font-size: 30px;
+  }
+  .icon-sun-o {
+    color: #ffb74d;
+  }
+  .icon-moon-o {
+    color: var(--palette-text-primary);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .toggle {
+    margin: 0 5px;
+    .icon {
+      font-size: 0.875rem;
+    }
+  }
+}
