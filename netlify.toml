@@ -1,8 +1,6 @@
 [build]
+  publish = "dist/the-movies"
   command = "npm run build"
-  publish= "/build"
-  base = "/"
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
